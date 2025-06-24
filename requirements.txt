@@ -1,2 +1,4 @@
 oracledb
 python-dotenv
+scikit-learn
+streamlit
