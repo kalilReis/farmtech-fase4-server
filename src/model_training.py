@@ -9,13 +9,6 @@ import joblib
 
 import os
 from dotenv import load_dotenv
-import oracledb
-import pandas as pd
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
-import joblib
 
 load_dotenv()
 
@@ -27,7 +20,7 @@ def load_data_from_db():
     connection = oracledb.connect(user=user, password=password, dsn=dsn)
     cursor = connection.cursor()
     query = """
-        SELECT timestamp, sensor_id, soil_moisture, humidity, phosphorus, potassium
+        SELECT timestamp, sensor_id, hour, temp, humidity_air, moisture_soil, irrigated
         FROM irrigation_data
     """
     cursor.execute(query)
@@ -40,18 +33,12 @@ def load_data_from_db():
 
 df = load_data_from_db()
 
-# Simular coluna alvo: necessidade de irrigação (1 = irrigar, 0 = não irrigar)
-# Exemplo: irrigar se soil_moisture < 30 ou potassium < 20 ou humidity < 65 ou phosphorus < 18
-df['irrigate'] = (
-    (df['soil_moisture'] < 30) |
-    (df['potassium'] < 20) |
-    (df['humidity'] < 65) |
-    (df['phosphorus'] < 18)
-).astype(int)
+# Use the irrigated column as the target variable directly
+# Convert sensor_id to numeric by extracting the number part
+df['sensor_id_num'] = df['sensor_id'].str.extract(r'(\d+)').astype(int)
 
-# Features e target
-X = df[['soil_moisture', 'humidity', 'phosphorus', 'potassium', 'sensor_id']]
-y = df['irrigate']
+X = df[['moisture_soil', 'humidity_air', 'temp', 'hour', 'sensor_id_num']]
+y = df['irrigated']
 
 # Dividir em treino e teste
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
