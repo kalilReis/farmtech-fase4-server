@@ -1,11 +1,8 @@
 import oracledb
 import csv
 from datetime import datetime
-
 import os
 from dotenv import load_dotenv
-import oracledb
-import csv
 
 load_dotenv()
 
