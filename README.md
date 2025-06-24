@@ -52,11 +52,49 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 - <b>src</b>: Todo o código fonte criado para o desenvolvimento do projeto ao longo das 7 fases.
 
+- <b>data</b>: Contém os dados utilizados no projeto, como o modelo de machine learning treinado (`irrigation_model.joblib`) e o arquivo `irrigation_data.csv`, que contém os dados de irrigação.
+
 - <b>README.md</b>: arquivo que serve como guia e explicação geral sobre o projeto (o mesmo que você está lendo agora).
 
 ## 🔧 Como executar o código
 
-_Acrescentar as informações necessárias sobre pré-requisitos (IDEs, serviços, bibliotecas etc.) e instalação básica do projeto, descrevendo eventuais versões utilizadas. Colocar um passo a passo de como o leitor pode baixar o seu código e executá-lo a partir de sua máquina ou seu repositório. Considere a explicação organizada em fase._
+Para executar o código, siga os seguintes passos:
+
+1.  **Instale as dependências:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+    Este comando irá instalar as bibliotecas necessárias listadas no arquivo `requirements.txt`, que incluem `oracledb`, `python-dotenv`, `scikit-learn` e `streamlit`.
+
+2.  **Configure as variáveis de ambiente:**
+    Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis de ambiente:
+
+    ```
+    DB_DSN=<seu_dsn>
+    DB_USER=<seu_usuario>
+    DB_PASSWORD=<sua_senha>
+    ```
+
+    Substitua `<seu_dsn>`, `<seu_usuario>` e `<sua_senha>` pelas suas credenciais do banco de dados Oracle.
+
+3.  **Execute os scripts na seguinte ordem:**
+
+    ```bash
+    python src/db_setup.py
+    python src/db_import.py
+    python src/model_training.py
+    python src/dashboard.py
+    ```
+
+    - `db_setup.py`: Este script cria a tabela `irrigation_data` no banco de dados Oracle.
+    - `db_import.py`: Este script importa os dados do arquivo `irrigation_data.csv` para a tabela `irrigation_data` no banco de dados Oracle.
+    - `model_training.py`: Este script treina o modelo de machine learning e salva o modelo treinado no arquivo `data/irrigation_model.joblib`.
+    - `dashboard.py`: Este script inicia o dashboard Streamlit.
+
+4.  **Acesse o dashboard:**
+    Após executar o script `dashboard.py`, o Streamlit irá exibir um link no terminal. Abra este link no seu navegador para acessar o dashboard.
 
 ## 🗃 Histórico de lançamentos
 
